@@ -1,0 +1,98 @@
+QUEESTION: considr classs A extends B and in class C which is having the main function where i am classing these a and b classes, 
+consider A a1 =new B(); is correct and B b1= new A(); is wrong but here can we do upcasting, B b1= (B) new A();?
+
+
+
+
+ANSWER: Let's break this down step by step.  
+
+---
+
+### **Class Inheritance Basics**  
+Assume we have the following class hierarchy:  
+```java
+class B {
+    void display() {
+        System.out.println("Inside class B");
+    }
+}
+
+class A extends B {
+    void show() {
+        System.out.println("Inside class A");
+    }
+}
+```
+---
+
+### **1️⃣ Can we do `A a1 = new B();`?**
+❌ **No, this is incorrect.**  
+- `A` is a subclass of `B`, meaning `B` is the parent class, and `A` **inherits** from `B`.
+- A parent class **cannot be assigned to a child class reference** without explicit casting.  
+- `A` might have additional methods/fields that `B` does not, so assigning a `B` object to an `A` reference is invalid.
+
+👉 **Correct assignment:**
+```java
+B b1 = new A();  // ✅ Allowed (Upcasting)
+```
+
+---
+
+### **2️⃣ Can we do `B b1 = new A();`? (Upcasting)**
+✅ **Yes, this is correct.**  
+- **Upcasting** means assigning a child class (`A`) object to a parent class (`B`) reference.  
+- The reference type (`B`) will only allow access to methods that exist in `B`, even though the actual object is of type `A`.
+
+👉 **Example:**
+```java
+B b1 = new A();  // ✅ Upcasting (allowed)
+b1.display();    // Works, since B has display()
+b1.show();       // ❌ ERROR! b1 is treated as a B reference, and B doesn't have show()
+```
+
+If we want to call `show()`, we must **downcast** explicitly.
+
+---
+
+### **3️⃣ Can we do `B b1 = (B) new A();`? (Explicit Upcasting)**
+✅ **Yes, but it is redundant.**  
+- `B b1 = new A();` already does **implicit upcasting**.  
+- Writing `B b1 = (B) new A();` is unnecessary because `new A()` is already an instance of `B`.
+
+👉 **Example:**
+```java
+B b1 = (B) new A();  // ✅ Works, but redundant
+b1.display();        // ✅ Allowed
+```
+
+---
+
+### **4️⃣ Can we do `A a1 = (A) new B();`? (Downcasting)**
+❌ **No, this will throw a `ClassCastException` at runtime!**  
+- `new B()` creates an instance of `B` (not `A`), and a `B` object **can never be cast to A**.
+- Downcasting only works when the actual object was **originally an instance of the subclass**.
+
+👉 **Incorrect example:**
+```java
+A a1 = (A) new B();  // ❌ Runtime Error: ClassCastException
+```
+
+👉 **Correct way to do Downcasting (only if B is actually A)**
+```java
+B b1 = new A();  // ✅ Upcasting
+A a1 = (A) b1;   // ✅ Downcasting (Safe, since b1 was originally an A)
+a1.show();        // ✅ Now we can access A's methods
+```
+
+---
+
+### **Final Summary**
+| Expression | Allowed? | Explanation |
+|------------|---------|-------------|
+| `A a1 = new B();` | ❌ No | `B` (parent) **cannot** be assigned to `A` (child). |
+| `B b1 = new A();` | ✅ Yes | Upcasting: `A` (child) **can** be assigned to `B` (parent). |
+| `B b1 = (B) new A();` | ✅ Yes (Redundant) | Explicit upcasting is unnecessary. |
+| `A a1 = (A) new B();` | ❌ No | Runtime `ClassCastException`. `B` is **not** an `A`. |
+| `A a1 = (A) b1;` (when `b1 = new A();`) | ✅ Yes | Downcasting is only safe if the actual object is `A`. |
+
+Would you like me to explain **real-world scenarios** where upcasting and downcasting are useful? 🚀
