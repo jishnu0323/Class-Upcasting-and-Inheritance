@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcasting and Downcasting in Java</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        code { background: #f4f4f4; padding: 4px; border-radius: 5px; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+
+    <h1>Upcasting and Downcasting in Java</h1>
+    <p>Let's break this down step by step.</p>
+
+    <h2>Class Inheritance Basics</h2>
+    <pre><code>class B {
+    void display() {
+        System.out.println("Inside class B");
+    }
+}
+
+class A extends B {
+    void show() {
+        System.out.println("Inside class A");
+    }
+}</code></pre>
+
+    <h2>1️⃣ Can we do <code>A a1 = new B();</code>?</h2>
+    <p>❌ <strong>No, this is incorrect.</strong></p>
+    <ul>
+        <li><code>A</code> is a subclass of <code>B</code>, meaning <code>B</code> is the parent class, and <code>A</code> inherits from <code>B</code>.</li>
+        <li>A parent class <strong>cannot</strong> be assigned to a child class reference without explicit casting.</li>
+    </ul>
+
+    <h2>2️⃣ Can we do <code>B b1 = new A();</code> (Upcasting)?</h2>
+    <p>✅ <strong>Yes, this is correct.</strong></p>
+    <pre><code>B b1 = new A();  // ✅ Allowed (Upcasting)
+b1.display();    // Works, since B has display()
+b1.show();       // ❌ ERROR! b1 is treated as a B reference</code></pre>
+
+    <h2>3️⃣ Can we do <code>B b1 = (B) new A();</code> (Explicit Upcasting)?</h2>
+    <p>✅ <strong>Yes, but it is redundant.</strong></p>
+    <pre><code>B b1 = (B) new A();  // ✅ Works, but redundant
+b1.display();        // ✅ Allowed</code></pre>
+
+    <h2>4️⃣ Can we do <code>A a1 = (A) new B();</code> (Downcasting)?</h2>
+    <p>❌ <strong>No, this will throw a <code>ClassCastException</code> at runtime!</strong></p>
+    <pre><code>A a1 = (A) new B();  // ❌ Runtime Error: ClassCastException</code></pre>
+
+    <h2>✅ Correct way to do Downcasting (Only if B is actually A)</h2>
+    <pre><code>B b1 = new A();  // ✅ Upcasting
+A a1 = (A) b1;   // ✅ Downcasting (Safe, since b1 was originally an A)
+a1.show();        // ✅ Now we can access A's methods</code></pre>
+
+    <h2>Final Summary</h2>
+    <table>
+        <tr>
+            <th>Expression</th>
+            <th>Allowed?</th>
+            <th>Explanation</th>
+        </tr>
+        <tr>
+            <td><code>A a1 = new B();</code></td>
+            <td>❌ No</td>
+            <td>B (parent) cannot be assigned to A (child).</td>
+        </tr>
+        <tr>
+            <td><code>B b1 = new A();</code></td>
+            <td>✅ Yes</td>
+            <td>Upcasting: A (child) can be assigned to B (parent).</td>
+        </tr>
+        <tr>
+            <td><code>B b1 = (B) new A();</code></td>
+            <td>✅ Yes (Redundant)</td>
+            <td>Explicit upcasting is unnecessary.</td>
+        </tr>
+        <tr>
+            <td><code>A a1 = (A) new B();</code></td>
+            <td>❌ No</td>
+            <td>Runtime ClassCastException.</td>
+        </tr>
+        <tr>
+            <td><code>A a1 = (A) b1;</code> (when <code>b1 = new A();</code>)</td>
+            <td>✅ Yes</td>
+            <td>Downcasting is only safe if the actual object is A.</td>
+        </tr>
+    </table>
+
+</body>
+</html>
